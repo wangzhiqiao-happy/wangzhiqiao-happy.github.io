@@ -1,0 +1,9 @@
+{
+  "name": "拾词 · 每日英语复习",
+  "short_name": "拾词",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f6f3ec",
+  "theme_color": "#153d35",
+  "icons": []
+}
