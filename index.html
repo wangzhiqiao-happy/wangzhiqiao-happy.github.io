@@ -43,9 +43,29 @@
   <div class="toast" id="toast"></div>
   <script>
     const KEY='shici.words.v1', META='shici.meta.v1';
-    const seed=[{id:'demo-curious',word:'curious',phonetic:'/ˈkjʊəriəs/',meaning:'好奇的；求知欲强的',example:"I'm curious about how it works.",own:'',level:0,due:Date.now(),created:Date.now()}];
+    const seed=[{id:'demo-curious',word:'curious',phonetic:'/ˈkjʊəriəs/',meaning:'好奇的；求知欲强的',example:"I'm curious about how it works.",level:0,due:Date.now(),created:Date.now()}];
+    const duolingoPack=[
+      {id:'duo-tight',word:'tight',phonetic:'/taɪt/',meaning:'紧的；紧身的；牢固的',example:'The lid is too tight.'},
+      {id:'duo-yard',word:'yard',phonetic:'/jɑːrd/',meaning:'院子；庭院；码',example:'The children are playing in the yard.'},
+      {id:'duo-refrigerator',word:'refrigerator',phonetic:'/rɪˈfrɪdʒəreɪtər/',meaning:'冰箱',example:'Put the milk in the refrigerator.'},
+      {id:'duo-bathing-suit',word:'bathing suit',phonetic:'/ˈbeɪðɪŋ suːt/',meaning:'泳衣；游泳衣',example:'I packed my bathing suit.'},
+      {id:'duo-curtain',word:'curtain',phonetic:'/ˈkɝːtən/',meaning:'窗帘；帘子',example:'Please close the curtain.'},
+      {id:'duo-ancient',word:'ancient',phonetic:'/ˈeɪnʃənt/',meaning:'古老的；古代的',example:'They visited an ancient castle.'},
+      {id:'duo-castle',word:'castle',phonetic:'/ˈkæsəl/',meaning:'城堡',example:'The castle is hundreds of years old.'},
+      {id:'duo-pickles',word:'pickles',phonetic:'/ˈpɪkəlz/',meaning:'腌黄瓜；泡菜',example:'No pickles, please.'},
+      {id:'duo-electricity',word:'electricity',phonetic:'/ɪˌlekˈtrɪsəti/',meaning:'电；电力',example:'The electricity went out last night.'},
+      {id:'duo-assignment',word:'assignment',phonetic:'/əˈsaɪnmənt/',meaning:'作业；任务',example:"Don't turn in the assignment yet."},
+      {id:'duo-turn-in',word:'turn in',phonetic:'/ˌtɝːn ˈɪn/',meaning:'上交；提交',example:'Please turn in your homework tomorrow.'}
+    ];
     let words=JSON.parse(localStorage.getItem(KEY)||'null')||seed;
-    let meta=JSON.parse(localStorage.getItem(META)||'{}'); let queue=[],reviewPos=0,currentImage='',talkScene=null,talkTurn=0,talkScore=0,recognition=null,meaningPassed=false,pronunciationPassed=false;
+    let meta=JSON.parse(localStorage.getItem(META)||'{}'),importedCount=0;
+    const packId='duolingo-screenshots-20261117';
+    if(!(meta.importedPacks||[]).includes(packId)){
+      const now=Date.now(),known=new Set(words.map(w=>w.word.toLowerCase()));
+      duolingoPack.forEach((w,i)=>{if(!known.has(w.word.toLowerCase())){words.push({...w,level:0,due:now,created:now+i});known.add(w.word.toLowerCase());importedCount++}});
+      meta.importedPacks=[...(meta.importedPacks||[]),packId];localStorage.setItem(KEY,JSON.stringify(words));localStorage.setItem(META,JSON.stringify(meta));
+    }
+    let queue=[],reviewPos=0,currentImage='',talkScene=null,talkTurn=0,talkScore=0,recognition=null,meaningPassed=false,pronunciationPassed=false;
     const scenes={
       cafe:{emoji:'☕',title:'咖啡店点单',level:'入门 · 约 2 分钟',steps:[
         {partner:'Hi! What can I get for you today?',hint:"I'd like a latte, please.",keywords:['like','please']},
@@ -108,7 +128,7 @@
     if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
     if(!isStandalone&&isIOS&&localStorage.getItem('shici.install.dismissed')!=='1')setTimeout(()=>$('#installCard').classList.add('show'),900);
     $('#installHelp').onclick=()=>$('#installSteps').classList.add('show');$('#closeInstallHelp').onclick=()=>$('#installSteps').classList.remove('show');$('#installSteps').onclick=e=>{if(e.target===$('#installSteps'))$('#installSteps').classList.remove('show')};$('#dismissInstall').onclick=()=>{$('#installCard').classList.remove('show');localStorage.setItem('shici.install.dismissed','1')};
-    $('#today').textContent=new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});render();
+    $('#today').textContent=new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});render();if(importedCount)setTimeout(()=>toast(`已收录 ${importedCount} 个多邻国词汇`),1200);
   </script>
 </body>
 </html>
