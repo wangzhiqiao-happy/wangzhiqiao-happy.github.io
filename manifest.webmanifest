@@ -5,8 +5,8 @@
   "start_url": "./?source=installed",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f6f3ec",
-  "theme_color": "#153d35",
+  "background_color": "#f8f4fc",
+  "theme_color": "#5e3987",
   "orientation": "portrait-primary",
   "categories": ["education", "productivity"],
   "icons": [
