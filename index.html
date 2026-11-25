@@ -40,6 +40,8 @@
   #editOverlay{z-index:35}.home .stats{grid-template-columns:repeat(2,minmax(0,1fr))}.practice-check{width:26px;height:26px;accent-color:var(--green);flex:none}.swipe-row{position:relative;overflow:hidden;border-radius:16px}.swipe-delete{position:absolute;right:0;inset-block:0;width:78px;background:#ad3158;color:white;border:0;border-radius:inherit;font-weight:700;opacity:0}.swipe-row .due-item{position:relative;transition:transform .16s;touch-action:pan-y}.swipe-row.revealed .due-item,.swipe-row:has(.swipe-delete:focus-visible) .due-item{transform:translateX(-86px)}.swipe-row.revealed .swipe-delete,.swipe-row:focus-within .swipe-delete{opacity:1}.word-actions button{touch-action:manipulation}    .practice-friend{position:absolute;right:3%;bottom:-7%;width:33%;max-width:230px;pointer-events:none;transform:rotate(-9deg);filter:drop-shadow(0 5px 10px #28174833)}
     .practice-feature p{max-width:62%}
     @media(max-width:600px){.practice-feature{justify-content:flex-start}.practice-feature p{max-width:100%;margin-bottom:20px}.practice-start{margin-top:auto;max-width:56%}.practice-friend{width:40%;right:-1%;bottom:-3%;max-height:44%}}
+      .practice-friend{bottom:-5px;right:2%;width:32%;max-height:83%;transform:rotate(5deg)}.feature-card:has(.entry-art){position:relative;overflow:hidden;isolation:isolate;justify-content:flex-end;padding-top:88px;background:#f4eefb}.entry-art{position:absolute;right:0;top:0;width:100%;height:100%;object-fit:cover;object-position:50% 38%;z-index:-2}.feature-card:has(.entry-art)::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#fff 2%,#fffffff0 25%,transparent 62%);z-index:-1}.feature-card:has(.entry-art){min-height:202px}.feature-card:has(.entry-art) small{color:#51425f}
+    @media(max-width:600px){.practice-friend{width:38%;max-height:42%;right:1%;bottom:-3px}.feature-card:has(.entry-art){min-height:178px}}
   </style>
 </head>
 <body>
@@ -48,16 +50,14 @@
     <section class="home">
       <div class="home-heading"><div><small>YOUR ENGLISH SPACE</small><h1>今天，拾一点新收获</h1></div><button class="settings-shortcut" id="openSettings" type="button" aria-label="打开设置">⚙</button></div>
       <button class="capture-entry" id="openAdd" type="button"><span class="capture-plus">＋</span><span class="capture-copy"><b>开启拾词</b><small>从相册、截图或手动收录新词</small></span><span class="entry-chevron">›</span></button>
-      <article class="practice-feature"><svg class="practice-friend" viewBox="55 138 1120 1000" aria-hidden="true" focusable="false">
-        <defs><clipPath id="star-outline">
-          <path d="M414 625 Q405 597 365 562 C260 475 294 415 425 397 Q496 387 535 323 C609 202 707 212 775 337 Q808 390 871 402 C1013 425 1083 508 952 624 L929 653 Q1026 686 1004 807 Q996 854 952 899 Q1030 863 1097 903 C1215 964 1151 1113 1055 1114 L657 1114 Q595 1144 511 1107 Q476 1123 417 1113 L270 1113 C86 1139 21 1022 112 944 Q151 903 214 885 C141 796 220 644 297 627 Q343 580 380 629 Z"/>
-          <rect x="844" y="150" width="58" height="137" rx="29" transform="rotate(26 873 219)"/>
-          <rect x="938" y="217" width="58" height="140" rx="29" transform="rotate(43 967 287)"/>
-          <rect x="992" y="313" width="58" height="122" rx="29" transform="rotate(67 1021 374)"/>
-        </clipPath></defs>
-        <image href="./share-star.jpg" width="1312" height="1312" clip-path="url(#star-outline)"/>
-      </svg><div class="eyebrow">DAILY PLAY</div><h2>趣味练习</h2><p id="heroText">把收集的词用翻译、听音、配对和跟读练熟。</p><button class="practice-start" id="startReview" type="button">开始趣味练习 <span>→</span></button></article>
-      <div class="feature-grid"><button class="feature-card" id="openSentences" type="button"><span class="feature-icon">✍️</span><b>我的句子</b><small>收录地道表达</small></button><button class="feature-card" id="openTalk" type="button"><span class="feature-icon">🎙️</span><b>情景对话</b><small>开口说英语</small></button><button class="feature-card" id="openLibrary" type="button"><span class="feature-icon">📚</span><b>我的词库</b><small>整理和选择要练的词</small></button></div>
+      <article class="practice-feature"><svg class="practice-friend" viewBox="135 210 865 944" aria-hidden="true" focusable="false">
+        <defs><clipPath id="heart-silhouette">
+          <path d="M326 853 Q339 727 323 710 C202 610 207 529 291 481 C343 446 402 455 425 409 C500 248 590 235 670 350 Q710 415 756 419 C867 422 924 487 892 612 C953 646 942 709 919 747 C952 796 880 861 832 824 Q813 850 772 864 Q742 931 706 947 C777 910 810 891 843 903 C970 879 1030 1030 948 1082 C897 1121 795 1104 736 1108 Q577 1177 381 1096 C124 1111 79 969 217 891 Q261 840 326 853Z"/>
+          <path d="M254 278 C199 242 156 314 221 363 Q258 386 299 391 C355 333 347 257 302 258 Q277 257 254 278Z"/>
+          <rect x="769" y="220" width="53" height="140" rx="27" transform="rotate(35 795 290)"/>
+          <rect x="845" y="279" width="50" height="109" rx="25" transform="rotate(61 870 333)"/>
+        </clipPath></defs><image href="./practice-heart.jpg" width="1199" height="1312" clip-path="url(#heart-silhouette)"/></svg><div class="eyebrow">DAILY PLAY</div><h2>趣味练习</h2><p id="heroText">把收集的词用翻译、听音、配对和跟读练熟。</p><button class="practice-start" id="startReview" type="button">开始趣味练习 <span>→</span></button></article>
+      <div class="feature-grid"><button class="feature-card" id="openSentences" type="button"><img class="entry-art" src="./sentence-reader.jpg" alt=""><b>我的句子</b><small>收录地道表达</small></button><button class="feature-card" id="openTalk" type="button"><img class="entry-art" src="./dialogue-listener.jpg" alt=""><b>情景对话</b><small>开口说英语</small></button><button class="feature-card" id="openLibrary" type="button"><span class="feature-icon">📚</span><b>我的词库</b><small>整理和选择要练的词</small></button></div>
       <div class="practice-options"><label>每轮练习 <select id="practiceCount"><option value="5">5 个词</option><option value="10">10 个词</option><option value="20">20 个词</option><option value="all">全部单词</option></select></label><label><input type="checkbox" id="randomAll" checked> 从整个词库随机抽取</label></div>
       <div class="stats"><button class="stat collection-button" id="openDue" type="button"><div class="num" id="dueCount">0</div><div class="label">今天待复习 ›</div></button><button class="stat collection-button" id="openCollection" type="button"><div class="num" id="totalCount">0</div><div class="label">全部收录 ›</div></button></div>
     </section>
