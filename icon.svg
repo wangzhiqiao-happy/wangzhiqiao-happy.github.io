@@ -1,6 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="116" fill="#5e3987"/>
-  <circle cx="403" cy="100" r="72" fill="#f4b7da"/>
-  <path d="M84 385c53-83 116-126 188-128 62-2 112 23 156 71v100H84z" fill="#dbc1f0" opacity=".95"/>
-  <text x="256" y="324" text-anchor="middle" font-family="PingFang SC, Noto Sans CJK SC, sans-serif" font-size="238" font-weight="700" fill="#ffffff">拾</text>
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="拾词精灵">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#8350c9"/><stop offset="1" stop-color="#4a2d83"/></linearGradient>
+    <linearGradient id="face" x1="0" x2=".8" y1="0" y2="1"><stop stop-color="#fff7fd"/><stop offset="1" stop-color="#e9d2fa"/></linearGradient>
+    <linearGradient id="lips" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ff9bc6"/><stop offset="1" stop-color="#df5a9a"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#291343" flood-opacity=".28"/></filter>
+  </defs>
+  <rect width="512" height="512"  fill="url(#bg)"/>
+  <circle cx="411" cy="102" r="44" fill="#f6d7ff" opacity=".25"/>
+  <circle cx="85" cy="391" r="58" fill="#d4b3f9" opacity=".18"/>
+  <path d="M393 74l8 23 23 8-23 8-8 23-8-23-23-8 23-8z" fill="#ffe6a5"/>
+  <g filter="url(#shadow)">
+    <path d="M119 181c0-35 29-64 64-64h146c35 0 64 29 64 64v147c0 36-29 65-64 65H206l-49 35 9-49c-28-8-47-34-47-65z" fill="url(#face)"/>
+  </g>
+  <path d="M187 217c4-14 15-19 25-15" fill="none" stroke="#583780" stroke-width="10" stroke-linecap="round"/>
+  <path d="M300 202c12-4 22 2 25 15" fill="none" stroke="#583780" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="190" cy="257" rx="18" ry="9" fill="#f6b9d4" opacity=".55"/>
+  <ellipse cx="323" cy="257" rx="18" ry="9" fill="#f6b9d4" opacity=".55"/>
+  <path d="M211 285c12-7 21-22 32-22 7 0 10 6 13 6s6-6 13-6c11 0 20 15 32 22-13 5-23 19-45 19s-32-14-45-19z" fill="url(#lips)" stroke="#b83d7a" stroke-width="4"/>
+  <path d="M211 285c10 12 24 31 45 31s35-19 45-31c-13 11-27 19-45 19s-32-8-45-19z" fill="#e45f9c" stroke="#b83d7a" stroke-width="4"/>
+  <path d="M231 282c7-5 12-6 19-6" fill="none" stroke="#ffe8f2" stroke-width="5" stroke-linecap="round"/>
+  <path d="M351 178l8 16 17 7-17 7-8 16-7-16-17-7 17-7z" fill="#ffc5e3"/>
 </svg>
