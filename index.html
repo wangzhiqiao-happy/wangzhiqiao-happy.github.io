@@ -57,6 +57,15 @@
     .home .stats .label{font-size:15px;line-height:1.4;font-weight:700;margin:0;color:#3e304a}
     .home .stats .stat::after{content:"›";position:absolute;right:12px;bottom:15px;width:25px;height:25px;display:grid;place-items:center;background:#ffffffa6;color:#644c70;border-radius:50%;font:22px/1 system-ui}
     .home .stats .stat:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+    .capture-block{display:grid;gap:12px;padding:18px;margin:12px 0;background:white;border:1px solid var(--line);border-radius:18px}
+    .capture-block input:not([type=checkbox]),.capture-block textarea,#checkRows input{font:inherit;font-size:16px;width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
+    .pick-shots{position:relative;display:grid;justify-items:center;gap:6px;padding:20px;background:#f3ecfb;border:1px dashed #a18ab9;border-radius:12px}
+    .pick-shots input{position:absolute;inset:0;opacity:0;cursor:pointer}.capture-block small:empty,.capture-block div:empty{display:none}
+    .pick-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.pick-chips label{background:#f6f1fa;border-radius:9px;padding:8px;display:flex;align-items:center;gap:5px}
+    #captureCheck{z-index:38}#checkRows label{display:grid;gap:4px;font-size:13px}#checkRows .capture-block{background:var(--card)}
+    #bgPreview{min-height:105px;width:100%;padding:20px}.practice-feature.custom-bg{background:var(--bg-tint);position:relative;isolation:isolate;overflow:hidden}
+    .custom-bg::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(#19132550,#19132570),var(--bg-image);background-size:cover;background-position:center;transform:scale(var(--bg-scale))}
+    .custom-bg .practice-actions img{visibility:hidden}
   </style>
 </head>
 <body>
@@ -76,10 +85,15 @@
   <aside class="install-card" id="installCard"><img class="install-icon" src="./melfy-star-192.png" alt="拾词图标"><div class="install-copy"><b>把「拾词」装到 iPhone</b><small>桌面图标 · 全屏打开 · 支持离线复习</small></div><button class="btn" id="installHelp">安装</button><button class="install-close" id="dismissInstall" aria-label="关闭">✕</button></aside>
   <div class="install-steps" id="installSteps"><section class="install-panel"><img class="install-icon" src="./melfy-star-192.png" alt="拾词图标"><h2>安装「拾词」</h2><ol><li>请使用 <b>Safari</b> 打开当前网址</li><li>点击底部的分享按钮 <span class="share-symbol">↥</span></li><li>向下滑，选择 <b>添加到主屏幕</b></li><li>点击右上角 <b>添加</b></li></ol><button class="btn" id="closeInstallHelp">我知道了</button></section></div>
 
-  <div class="overlay" id="addOverlay"><section class="sheet"><div class="sheet-head"><h2>收进新词</h2><button class="close" data-close="addOverlay">✕</button></div><div class="drop"><label class="btn ghost" for="shotInput">🖼️ 选择截图（最多 5 张）</label><input type="file" id="shotInput" accept="image/*" multiple><div class="ocr-status" id="ocrStatus">选择图片后勾选要学的词；识别错了可直接改英文</div><div class="shot-review" id="shotReview"></div><div class="import-list" id="importList"></div><label class="paste-label" for="pasteWords">也可以用 iPhone 照片里的“拷贝文本”粘贴到这里</label><textarea id="pasteWords" placeholder="从照片复制英文后粘贴，识别错的地方可修改"></textarea><button class="btn ghost" id="parsePasted" type="button">从粘贴文字中挑词</button><button class="btn" id="importSelected" type="button" hidden>加入选中的词</button></div><form id="chineseForm" class="edit-fields"><label for="chineseSource">用中文拾词</label><input id="chineseSource" required maxlength="160" placeholder="例如：冰箱" autocomplete="off"><button class="btn" type="submit">翻成英文并收录</button><small id="chineseStatus" role="status"></small></form><form id="wordForm"><div class="form-grid"><div class="field"><label for="wordInput">或者手动输入英文单词</label><input id="wordInput" placeholder="例如: curious" autocomplete="off"></div><div class="field"><label for="phoneticInput">音标（可选）</label><input id="phoneticInput" placeholder="自动获取"></div><div class="field full"><label for="meaningInput">中文翻译（自动获取，可修改）</label><input id="meaningInput" placeholder="输入英文后自动翻译"></div><div class="field full"><label for="exampleInput">参考例句（可选）</label><textarea id="exampleInput" placeholder="例如: I'm curious about how it works."></textarea></div></div><div class="save-row"><button class="btn" type="submit">加入测试计划</button></div></form></section></div>
+  <div class="overlay" id="addOverlay"><section class="sheet"><div class="sheet-head"><h2>开启拾词</h2><button class="close" data-close="addOverlay" aria-label="关闭">✕</button></div>
+    <section class="capture-block"><label class="pick-shots"><strong>＋ 选择截图</strong><small>每次可选 1–10 张</small><input id="shotInput" type="file" accept="image/*" multiple></label><div id="ocrStatus" role="status"></div><div id="shotWords"></div></section>
+    <section class="capture-block"><label for="pasteWords"><b>拷贝文本</b></label><textarea id="pasteWords" placeholder="粘贴或输入英文，挑出想学的词"></textarea><button class="btn ghost" id="parsePasted">挑选英文</button><div id="pasteChoices"></div></section>
+    <form id="chineseForm" class="capture-block"><label for="chineseSource"><b>中文拾词</b></label><input id="chineseSource" required maxlength="160" placeholder="输入中文词或短语，例如：冰箱"><button class="btn ghost">翻成英文</button><small id="chineseStatus" role="status"></small></form>
+  </section></div>
+  <div class="overlay" id="captureCheck" role="dialog" aria-modal="true" aria-labelledby="captureTitle"><section class="sheet"><div class="sheet-head"><h2 id="captureTitle">核对收录</h2><button class="close" data-close="captureCheck" aria-label="返回修改">✕</button></div><form id="checkedWords"><div id="checkRows"></div><p id="checkStatus" role="status"></p><button type="submit" class="btn">确认收录</button></form></section></div>
   <div class="overlay" id="editOverlay"><section class="sheet"><div class="sheet-head"><h2>编辑单词</h2><button class="close" data-close="editOverlay">✕</button></div><form id="editForm" class="edit-fields"><label>英文<input id="editWord" required></label><label>中文翻译<input id="editMeaning" required></label><label>音标<input id="editPhonetic"></label><label>例句<input id="editExample"></label><button class="btn" type="submit">保存修改</button></form></section></div>
   <div class="overlay" id="sentencesOverlay"><section class="sheet"><div class="sheet-head"><h2>我的句子</h2><button class="close" data-close="sentencesOverlay">✕</button></div><p>收录地道表达，练习时会和单词混合出现。</p><form id="sentenceForm" class="edit-fields"><label>英文句子<textarea id="sentenceEnglish" required placeholder="例如：That sounds like a plan."></textarea></label><label>中文意思<textarea id="sentenceChinese" required placeholder="可以自动翻译，再按你的理解修改"></textarea></label><button class="btn ghost" type="button" id="translateSentence">自动翻译</button><button class="btn" type="submit" id="saveSentence">收录句子</button></form><div class="sentence-list" id="sentenceList"></div></section></div>
-  <div class="overlay" id="settingsOverlay"><section class="sheet"><div class="sheet-head"><h2>练习与外观设置</h2><button class="close" data-close="settingsOverlay">✕</button></div><section class="settings-row"><b>词库备份</b><small id="backupStatus">词和句子保存在当前设备的这个入口。换入口前可以先导出。</small><button class="btn ghost" id="exportDeck">导出词和句子</button><button type="button" class="btn ghost" id="restoreReduction">找回上次减少的条目</button><label>合并已有备份<input type="file" id="importDeck" accept=".json,application/json"></label></section><div id="settingsPractice"></div><div class="settings-row"><label for="sentenceCount">每轮句子</label><select id="sentenceCount"><option value="0">暂不练句子</option><option value="2">2 句</option><option value="5">5 句</option><option value="all">全部句子</option></select></div><div class="settings-row"><label for="themeSelect">界面主题</label><select id="themeSelect"><option value="purple">薰衣草紫</option><option value="blue">晴空蓝</option><option value="peach">蜜桃粉</option><option value="mint">薄荷绿</option><option value="custom">自选颜色</option></select><input type="color" id="customColor" value="#7850aa" aria-label="选择主题颜色"></div><p class="ocr-status">设置会保存在这台设备上。</p></section></div>
+  <div class="overlay" id="settingsOverlay"><section class="sheet"><div class="sheet-head"><h2>练习与外观设置</h2><button class="close" data-close="settingsOverlay">✕</button></div><section class="settings-row"><b>词库备份</b><small id="backupStatus">词和句子保存在当前设备的这个入口。换入口前可以先导出。</small><button class="btn ghost" id="exportDeck">导出词和句子</button><button type="button" class="btn ghost" id="restoreReduction">找回上次减少的条目</button><label>合并已有备份<input type="file" id="importDeck" accept=".json,application/json"></label></section><section class="settings-row"><b>趣味练习背景</b><div id="bgPreview" class="practice-feature"><b>趣味练习</b></div><label>背景色 <input id="bgColor" type="color" value="#614681"></label><label>上传背景图片 <input id="bgFile" type="file" accept="image/*"></label><label>图片缩放 <input id="bgZoom" type="range" min="100" max="250" value="100"></label><button id="bgClear" class="btn ghost">移除图片</button><button id="bgApply" class="btn">应用背景</button></section><div id="settingsPractice"></div><div class="settings-row"><label for="sentenceCount">每轮句子</label><select id="sentenceCount"><option value="0">暂不练句子</option><option value="2">2 句</option><option value="5">5 句</option><option value="all">全部句子</option></select></div><div class="settings-row"><label for="themeSelect">界面主题</label><select id="themeSelect"><option value="purple">薰衣草紫</option><option value="blue">晴空蓝</option><option value="peach">蜜桃粉</option><option value="mint">薄荷绿</option><option value="custom">自选颜色</option></select><input type="color" id="customColor" value="#7850aa" aria-label="选择主题颜色"></div><p class="ocr-status">设置会保存在这台设备上。</p></section></div>
   <div class="overlay" id="progressOverlay"><section class="sheet"><div class="sheet-head"><h2>我的学习进度</h2><button class="close" data-close="progressOverlay">✕</button></div><div id="progressDetails" class="progress-details"></div><button class="btn" id="progressPractice">继续练习</button></section></div>
   <div class="overlay" id="dueOverlay"><section class="sheet due-sheet"><div class="sheet-head"><div><small class="due-kicker">TODAY'S FOCUS</small><h2>今日待打卡</h2></div><button class="close" data-close="dueOverlay">✕</button></div><p class="due-intro">这些词到了该再见一面的时间。先听一遍，再选择今天想练的。</p><label><input type="checkbox" id="dueAll"> 全选今天的词</label><div id="dueList" class="due-list"></div><button class="btn due-start" id="dueStart" type="button">练习今天的词</button></section></div>
   <div class="overlay" id="collectionOverlay"><section class="sheet"><div class="sheet-head"><h2>全部收藏 <small id="collectionCount"></small></h2><button class="close" data-close="collectionOverlay">✕</button></div><div id="collectionList" class="collection-list"></div></section></div>
@@ -232,9 +246,6 @@
     $('#openTalk').onclick=()=>{resetTalkPicker();show('talkOverlay')};$('#backScenes').onclick=resetTalkPicker;$$('[data-scene]').forEach(b=>b.onclick=()=>startScene(b.dataset.scene));$('#sendTalk').onclick=sendTalk;$('#talkAnswer').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendTalk()}});$('#showHint').onclick=()=>{$('#hintText').textContent=talkScene?talkScene.steps[talkTurn].hint:'';if(talkScene)speak(talkScene.steps[talkTurn].hint)};
     $('#micBtn').onclick=()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){toast('这个浏览器暂不支持语音识别，可以直接输入英语回答');return}if(recognition){recognition.stop();return}recognition=new SpeechRecognition();recognition.lang='en-US';recognition.interimResults=true;recognition.continuous=false;const btn=$('#micBtn');btn.classList.add('listening');btn.textContent='■';$('#coachTip').textContent='正在听你说英语…';recognition.onresult=e=>{$('#talkAnswer').value=Array.from(e.results).map(r=>r[0].transcript).join('')};recognition.onerror=()=>toast('没有听清，再试一次或直接输入');recognition.onend=()=>{btn.classList.remove('listening');btn.textContent='🎙';recognition=null;$('#coachTip').textContent=$('#talkAnswer').value?'听到了！确认一下文字，然后点击发送。':'准备好了就再试一次。'};recognition.start()};
     const miniDict={curious:['/ˈkjʊəriəs/','好奇的；求知欲强的',"I'm curious about how it works."],achieve:['/əˈtʃiːv/','实现；达到',"Small steps help us achieve big goals."],improve:['/ɪmˈpruːv/','改善；提高',"I want to improve my English every day."],instead:['/ɪnˈsted/','代替；反而',"Let's walk instead of taking a taxi."],realize:['/ˈriːəlaɪz/','意识到；实现',"I realized I had seen the word before."],ordinary:['/ˈɔːrdəneri/','普通的；平常的',"It looked like an ordinary day."]};
-    $('#wordInput').addEventListener('change',e=>{const hit=miniDict[e.target.value.trim().toLowerCase()];if(hit){$('#phoneticInput').value||=hit[0];$('#meaningInput').value||=hit[1];$('#exampleInput').value||=hit[2]}});
-    $('#shotInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;const img=$('#shotPreview');img.src=URL.createObjectURL(f);img.style.display='block';$('#ocrStatus').textContent='正在识别截图中的英文…';try{if(!window.Tesseract)throw Error();const r=await Tesseract.recognize(f,'eng',{logger:m=>{if(m.progress)$('#ocrStatus').textContent=`识别中 ${Math.round(m.progress*100)}%`}});const candidates=(r.data.text.match(/[A-Za-z][A-Za-z'-]{2,}/g)||[]).sort((a,b)=>b.length-a.length);if(candidates[0]){$('#wordInput').value=candidates[0].toLowerCase();$('#wordInput').dispatchEvent(new Event('change'));$('#ocrStatus').textContent=`识别到 “${candidates[0]}”，请确认是否正确`;}else throw Error()}catch{$('#ocrStatus').textContent='没有自动识别出来，请在下方手动输入单词';}};
-    $('#wordForm').onsubmit=e=>{e.preventDefault();const word=$('#wordInput').value.trim().toLowerCase();if(words.some(w=>w.word.toLowerCase()===word)){toast('这个词已经在词库里啦');return}words.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),word,phonetic:$('#phoneticInput').value.trim(),meaning:$('#meaningInput').value.trim(),example:$('#exampleInput').value.trim(),level:0,due:Date.now(),created:Date.now()});save();e.target.reset();$('#shotPreview').style.display='none';$('#ocrStatus').textContent='可以选择多邻国截图或现场拍照，上传后会尝试识别英文';hide('addOverlay');toast('已加入今天的测试计划')};
     const meaningBank=['迅速的；快速的','安静的；平静的','决定；选择','旅行；旅程','必要的；必需的','改善；提高','普通的；平常的','代替；反而','意识到；明白','机会；可能性','支持；帮助','困难的；艰难的'];
     const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
     function startReview(){queue=dueWords();if(!queue.length)queue=shuffle([...words]).slice(0,5);if(!queue.length){show('addOverlay');return}reviewPos=0;show('reviewOverlay');showMeaningTest()}
@@ -256,13 +267,13 @@
     $('#installHelp').onclick=()=>$('#installSteps').classList.add('show');$('#closeInstallHelp').onclick=()=>$('#installSteps').classList.remove('show');$('#installSteps').onclick=e=>{if(e.target===$('#installSteps'))$('#installSteps').classList.remove('show')};$('#dismissInstall').onclick=()=>{$('#installCard').classList.remove('show');localStorage.setItem('shici.install.dismissed','1')};
     // Personal review choices are stored separately from the vocabulary itself.
     let selectedDue=new Set(JSON.parse(localStorage.getItem('shici.selected.v1')||'null')||words.map(w=>w.id));
-    let candidates=[],editingId=null,lookupTimer;
+    let editingId=null;
     const knownTranslations=Object.fromEntries([...duolingoPack,...seed].map(w=>[w.word.toLowerCase(),{meaning:w.meaning,phonetic:w.phonetic,example:w.example}]));
     Object.entries(miniDict).forEach(([word,v])=>knownTranslations[word]={phonetic:v[0],meaning:v[1],example:v[2]});
     async function lookupWord(word){
       const clean=word.trim().toLowerCase();if(knownTranslations[clean])return knownTranslations[clean];
       const url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(clean)+'&langpair=en%7Czh-CN';
-      const response=await fetch(url);if(!response.ok)throw Error('翻译服务暂不可用');
+      const response=await fetch(url,{signal:AbortSignal.timeout(12000)});if(!response.ok)throw Error('翻译服务暂不可用');
       const data=await response.json(),meaning=data.responseData?.translatedText?.trim();
       if(data.responseStatus!==200||!meaning||meaning.toLowerCase()===clean||!/[\u3400-\u9fff]/.test(meaning))throw Error('暂时无法自动翻译 '+clean);
       return {meaning,phonetic:'',example:''};
@@ -286,10 +297,7 @@
           word=data.responseData?.translatedText?.trim();
           if(Number(data.responseStatus)!==200||!word||!/[a-z]/i.test(word)||/[\u3400-\u9fff]/.test(word))throw Error();
         }
-        if(words.some(item=>item.word.toLowerCase()===word.toLowerCase())){status.textContent=word+' 已在词库里。';return}
-        const now=Date.now(),id=crypto.randomUUID();
-        words.unshift({id,word,meaning,phonetic:match?.[1].phonetic||'',example:match?.[1].example||'',created:now,due:now,level:0});
-        selectedDue.add(id);save();input.value='';status.textContent='已收录 '+word+' · '+meaning;
+        status.textContent='';reviewCapture([{word,meaning,phonetic:match?.[1].phonetic||''}]);
       } catch {status.textContent='这次未能完成收录，请检查网络或设备空间后重试。'}
       finally {button.disabled=false;input.readOnly=false}
     };
@@ -300,15 +308,154 @@
     $('#startSelected').onclick=()=>{queue=dueWords().filter(w=>selectedDue.has(w.id));if(!queue.length){toast('先勾选要复习的词');return}reviewPos=0;show('reviewOverlay');showMeaningTest()};
     $('#startReview').onclick=$('#startSelected').onclick;
     $('#editForm').onsubmit=e=>{e.preventDefault();const w=words.find(x=>x.id===editingId),name=$('#editWord').value.trim().toLowerCase();if(words.some(x=>x.id!==editingId&&x.word.toLowerCase()===name)){toast('同名词已存在');return}Object.assign(w,{word:name,meaning:$('#editMeaning').value.trim(),phonetic:$('#editPhonetic').value.trim(),example:$('#editExample').value.trim()});save();hide('editOverlay');toast('已保存')};
-    $('#wordInput').oninput=e=>{clearTimeout(lookupTimer);const word=e.target.value.trim();if(!word)return;lookupTimer=setTimeout(async()=>{try{const result=await lookupWord(word);if($('#wordInput').value.trim()!==word)return;$('#meaningInput').value=result.meaning;$('#phoneticInput').value||=result.phonetic||'';$('#exampleInput').value||=result.example||''}catch{$('#meaningInput').placeholder='自动翻译失败，可稍后重试或自己填写'}},500)};
-    $('#shotInput').onchange=async e=>{const files=[...e.target.files];if(files.length>5){toast('一次最多选择 5 张截图');e.target.value='';return}candidates=[];$('#importList').innerHTML='';$('#shotReview').innerHTML='';$('#importSelected').hidden=true;if(!files.length)return;$('#shotReview').innerHTML=files.map(f=>`<img src="${URL.createObjectURL(f)}" alt="待识别截图">`).join('');$('#ocrStatus').textContent=`正在识别 0 / ${files.length} 张截图…`;for(let i=0;i<files.length;i++){try{if(!window.Tesseract)throw Error('识别组件未加载');let result=await Tesseract.recognize(await prepareOcrImage(files[i]),'eng');if(result.data.confidence<65){const retry=await Tesseract.recognize(files[i],'eng');if(retry.data.confidence>result.data.confidence)result=retry}const found=(result.data.text.match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g)||[]).map(w=>w.toLowerCase().replace('’',"'"));const unique=[...new Set(found)].filter(w=>w.length>=3&&!['duolingo','choose','match','translate','continue','check','correct','answer','the','and','you','with','this','that','for','from','your','are','was','have','not'].includes(w));unique.forEach(word=>{if(!candidates.some(c=>c.word===word))candidates.push({word,source:i+1})})}catch{toast(`第 ${i+1} 张识别失败，可重选或手动录入`)}$('#ocrStatus').textContent=`已识别 ${i+1} / ${files.length} 张 · 勾选需要的词`;}$('#importList').innerHTML=candidates.map((c,i)=>`<label class="import-row"><input type="checkbox" data-candidate="${i}"><input class="candidate-edit" data-candidate-edit="${i}" value="${esc(c.word)}" aria-label="修改识别出的英文"><small>第 ${c.source} 张</small></label>`).join('')||'<p>没有识别到英文，请手动输入。</p>';$('#importSelected').hidden=!candidates.length;e.target.value=''};
-    $('#importSelected').onclick=async()=>{const chosen=[...$$('[data-candidate]:checked')].map(b=>{const i=+b.dataset.candidate;return {...candidates[i],word:$('#importList [data-candidate-edit=\"'+i+'\"]').value.trim().toLowerCase()}}).filter(c=>/^[a-z]+(?:[ '-][a-z]+)*$/.test(c.word));if(!chosen.length){toast('请先勾选要加入的词');return}const btn=$('#importSelected');btn.disabled=true;let added=0,failed=[];for(const c of chosen){if(words.some(w=>w.word.toLowerCase()===c.word))continue;try{btn.textContent=`翻译中 ${added+failed.length+1} / ${chosen.length}`;const data=await lookupWord(c.word);const now=Date.now();const id=crypto.randomUUID?.()||String(now+added);words.unshift({id,word:c.word,meaning:data.meaning,phonetic:data.phonetic||'',example:data.example||'',level:0,due:now,created:now});selectedDue.add(id);added++}catch{failed.push(c.word)}}save();btn.disabled=false;btn.textContent='加入选中的词';if(failed.length){$('#ocrStatus').textContent=`已加入 ${added} 个；${failed.join('、')} 翻译失败，请稍后重试或手动录入`;$$('[data-candidate]').forEach(b=>b.checked=failed.includes(candidates[+b.dataset.candidate].word))}else{hide('addOverlay');toast(`已加入 ${added} 个词`)}};
-    $('#wordForm').onsubmit=async e=>{e.preventDefault();const word=$('#wordInput').value.trim().toLowerCase();if(!word){toast('请先输入英文单词');return}if(words.some(w=>w.word.toLowerCase()===word)){toast('这个词已在词库里');return}const btn=e.submitter;btn.disabled=true;try{const data=$('#meaningInput').value.trim()?{meaning:$('#meaningInput').value.trim()}:await lookupWord(word);const now=Date.now(),id=crypto.randomUUID?.()||String(now);words.unshift({id,word,meaning:data.meaning,phonetic:$('#phoneticInput').value.trim()||data.phonetic||'',example:$('#exampleInput').value.trim()||data.example||'',level:0,due:now,created:now});selectedDue.add(id);save();e.target.reset();hide('addOverlay');toast('已自动翻译并加入词库')}catch(err){toast(err.message)}finally{btn.disabled=false}};
-    async function prepareOcrImage(file){
-      if(!window.createImageBitmap)return file;const bitmap=await createImageBitmap(file),scale=Math.min(2.5,3200/Math.max(bitmap.width,bitmap.height));
-      const canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
-      const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.filter='grayscale(1) contrast(2)';ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close?.();return canvas;
+    function englishChoices(text) {
+      const tokens=text.match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g)||[];
+      return [...new Set(tokens.map(w=>w.toLowerCase().replaceAll('’',"'")))];
     }
+    function offerChoices(container,items) {
+      container.replaceChildren();
+      if(!items.length)return;
+      const chips=document.createElement('div');chips.className='pick-chips';
+      chips.innerHTML=items.map(word=>`<label><input type="checkbox" value="${esc(word)}">${esc(word)}</label>`).join('');
+      const button=document.createElement('button');button.className='btn';button.textContent='加入选中的词';
+      button.onclick=()=>{
+        const chosen=[...chips.querySelectorAll(':checked')].map(box=>({word:box.value}));
+        if(chosen.length)reviewCapture(chosen);else toast('先点选想学的词');
+      };
+      container.append(chips,button);
+    }
+    $('#parsePasted').onclick=()=>{
+      const text=$('#pasteWords').value.trim(),items=englishChoices(text);
+      if(items.length && /^[a-z][a-z ’'-]+$/i.test(text) && / /.test(text))items.unshift(text);
+      offerChoices($('#pasteChoices'),items);if(!items.length)toast('请先粘贴或输入英文');
+    };
+    function loadImage(file){
+      return new Promise((resolve,reject)=>{
+        const url=URL.createObjectURL(file),img=new Image();
+        img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};
+        img.onerror=()=>{URL.revokeObjectURL(url);reject(Error('图片无法读取'))};img.src=url;
+      });
+    }
+    function scaledCanvas(img,maxSide,upscale){
+      const ratio=Math.min(upscale,maxSide/Math.max(img.naturalWidth,img.naturalHeight));
+      const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(img.naturalWidth*ratio));cv.height=Math.max(1,Math.round(img.naturalHeight*ratio));
+      const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.drawImage(img,0,0,cv.width,cv.height);return cv;
+    }
+    async function readScreenshot(worker,file){
+      const canvas=scaledCanvas(await loadImage(file),3000,2);
+      const ctx=canvas.getContext('2d'),pixels=ctx.getImageData(0,0,canvas.width,canvas.height);
+      for(let i=0;i<pixels.data.length;i+=4){
+        const gray=.299*pixels.data[i]+.587*pixels.data[i+1]+.114*pixels.data[i+2];
+        const contrast=Math.max(0,(gray-250)*2.8+250);
+        pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=contrast;
+      }
+      ctx.putImageData(pixels,0,0);
+      await worker.setParameters({tessedit_pageseg_mode:'11'});
+      const first=(await worker.recognize(canvas)).data;
+      if(first.text.trim() && first.confidence>=75)return first.text;
+      await worker.setParameters({tessedit_pageseg_mode:'3'});
+      const second=(await worker.recognize(file)).data;
+      return second.text.trim() && (!first.text.trim() || second.confidence>=first.confidence)?second.text:first.text;
+    }
+    $('#shotInput').onchange=async event=>{
+      const picker=event.target,files=Array.from(picker.files),status=$('#ocrStatus');
+      if(!files.length)return;
+      if(files.length>10){toast('每次最多选 10 张，请重新选择');picker.value='';return}
+      picker.disabled=true;offerChoices($('#shotWords'),[]);
+      const items=new Set(),failed=[];let worker;
+      try {
+        status.textContent='正在准备英文识别…';
+        worker=await Tesseract.createWorker('eng');
+        for(const [i,file] of files.entries()){
+          status.textContent=`正在识别第 ${i+1} / ${files.length} 张`;
+          try {
+            const content=await readScreenshot(worker,file);
+            const found=englishChoices(content).filter(w=>w.length>1||w==='a'||w==='i');
+            for(const line of content.split(/\r?\n/)){
+              const phrase=line.trim().replace(/\s+/g,' ').toLowerCase();
+              if(/^[a-z]+(?:['’-][a-z]+)*(?: [a-z]+(?:['’-][a-z]+)*){1,3}$/.test(phrase))items.add(phrase);
+            }
+            for(const w of found)items.add(w);
+            if(!found.length)failed.push(i+1);
+          }catch{failed.push(i+1)}
+        }
+        offerChoices($('#shotWords'),[...items]);
+        status.textContent=`找到 ${items.size} 个英文词`+(failed.length?`。第 ${failed.join('、')} 张未识别出英文，可用下方「拷贝文本」。`:'，点选想学的词。');
+      } catch {status.textContent='无法加载英文识别，请检查网络后重试，或使用「拷贝文本」。'}
+      finally {picker.disabled=false;picker.value='';if(worker)await worker.terminate()}
+    };
+    function reviewCapture(items){
+      const area=$('#checkRows');area.replaceChildren();$('#checkStatus').textContent='';show('captureCheck');
+      for(const item of items){
+        const row=document.createElement('section');row.className='capture-block';
+        row.innerHTML='<label>英文<input class="en" required></label><button type="button" class="btn ghost listen">试听发音</button><label>音标（可修改）<input class="ipa"></label><label>中文翻译<input class="zh" required></label><button type="button" class="btn ghost retry">重新翻译</button><small role="status"></small>';
+        const en=row.querySelector('.en'),zh=row.querySelector('.zh'),ipa=row.querySelector('.ipa'),note=row.querySelector('small');
+        en.value=item.word;zh.value=item.meaning||'';ipa.value=item.phonetic||'';
+        row.querySelector('.listen').onclick=()=>speak(en.value.trim());
+        let revision=0;
+        const translate=async()=>{
+          const id=++revision,word=en.value.trim();if(!word)return;
+          note.textContent='正在翻译…';
+          try{
+            const data=await lookupWord(word);
+            if(id!==revision||!row.isConnected)return;
+            zh.value=data.meaning;ipa.value=data.phonetic||'';note.textContent='';
+          }catch{if(id===revision)note.textContent='暂时无法自动翻译，可以重试或填写中文。'}
+        };
+        en.oninput=()=>{revision++;zh.value='';ipa.value='';note.textContent=''};
+        en.onchange=translate;
+        zh.oninput=ipa.oninput=()=>{revision++;note.textContent=''};
+        row.querySelector('.retry').onclick=translate;area.append(row);
+        if(!item.meaning)translate();
+      }
+    }
+    $('#checkedWords').onsubmit=e=>{
+      e.preventDefault();
+      const names=new Set(words.map(w=>w.word.toLowerCase())),added=[];
+      for(const row of $('#checkRows').children){
+        const word=row.querySelector('.en').value.trim(),meaning=row.querySelector('.zh').value.trim();
+        if(!/[a-z]/i.test(word)||!meaning){$('#checkStatus').textContent='请检查每个词的英文和中文翻译';return}
+        if(names.has(word.toLowerCase()))continue;
+        const now=Date.now();names.add(word.toLowerCase());
+        added.push({id:crypto.randomUUID(),word,meaning,phonetic:row.querySelector('.ipa').value.trim(),example:knownTranslations[word.toLowerCase()]?.example||'',created:now,due:now,level:0});
+      }
+      if(added.length){words.unshift(...added);added.forEach(w=>selectedDue.add(w.id));save()}
+      hide('captureCheck');hide('addOverlay');toast(added.length?'已收录 '+added.length+' 个词':'这些词已经在词库里了');
+    };
+    const bgKey='shici.practice.background.v1',bgCard=document.querySelector('article.practice-feature');
+    let appliedBg=null,draftBg;
+    try{appliedBg=JSON.parse(localStorage.getItem(bgKey))}catch{}
+    function paintBg(el,bg){
+      el.classList.toggle('custom-bg',!!bg);
+      if(!bg)return;
+      el.style.setProperty('--bg-tint',bg.color);
+      el.style.setProperty('--bg-image',bg.image?'url("'+bg.image+'")':'none');
+      el.style.setProperty('--bg-scale',String(bg.zoom/100));
+    }
+    function resetBgEditor(){
+      draftBg={color:'#614681',image:'',zoom:100,...appliedBg};
+      $('#bgColor').value=draftBg.color;$('#bgZoom').value=draftBg.zoom;
+      paintBg($('#bgPreview'),draftBg);
+    }
+    paintBg(bgCard,appliedBg);resetBgEditor();
+    $('#bgColor').oninput=e=>{draftBg.color=e.target.value;paintBg($('#bgPreview'),draftBg)};
+    $('#bgZoom').oninput=e=>{draftBg.zoom=Number(e.target.value);paintBg($('#bgPreview'),draftBg)};
+    let imageJob=0;
+    $('#bgFile').onchange=async e=>{
+      const file=e.target.files[0];if(!file)return;
+      const job=++imageJob;$('#bgApply').disabled=true;
+      try{
+        const img=await loadImage(file);if(job!==imageJob)return;
+        draftBg.image=scaledCanvas(img,1000,1).toDataURL('image/jpeg',.75);paintBg($('#bgPreview'),draftBg);
+      }catch{toast('无法读取图片，请换一张试试')}
+      finally{if(job===imageJob)$('#bgApply').disabled=false;e.target.value=''}
+    };
+    $('#bgClear').onclick=()=>{imageJob++;$('#bgApply').disabled=false;draftBg.image='';paintBg($('#bgPreview'),draftBg)};
+    $('#bgApply').onclick=()=>{
+      try{localStorage.setItem(bgKey,JSON.stringify(draftBg));appliedBg={...draftBg};paintBg(bgCard,appliedBg);hide('settingsOverlay');toast('练习背景已应用')}
+      catch{toast('设备空间不足，请尝试较小的图片')}
+    };
+
     // Speech recognition varies across iPhone versions; always show a clear fallback.
     $('#selfPronounce').onclick=()=>{pronunciationPassed=true;completeTestWord()};
     $('#pronounceMic').onclick=()=>{
@@ -326,7 +473,6 @@
     };
     function applyLibraryFilter(){const q=$('#librarySearch').value.trim().toLowerCase(),filter=$('#libraryFilter').value;$$('[data-library-word]').forEach(card=>{const level=+card.dataset.libraryLevel;card.style.display=card.dataset.libraryWord.toLowerCase().includes(q)&&(filter==='all'||filter==='due'&&words.some(w=>w.word+' '+w.meaning===card.dataset.libraryWord&&dayStart(w.due||0)<=dayStart(Date.now()))||filter==='favorites'&&words.some(w=>w.word+' '+w.meaning===card.dataset.libraryWord&&w.favorite!==false)||filter==='new'&&level===0||filter==='learning'&&level>0&&level<3||filter==='mastered'&&level>=3)?'':'none'})}
     $('#librarySearch').oninput=applyLibraryFilter;$('#libraryFilter').onchange=applyLibraryFilter;
-    $('#parsePasted').onclick=()=>{const found=($('#pasteWords').value.match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g)||[]).map(w=>w.toLowerCase().replace('’',"'")).filter(w=>w.length>=2);if(!found.length){toast('先粘贴照片里复制的英文');return}for(const word of [...new Set(found)])if(!candidates.some(c=>c.word===word))candidates.push({word,source:'粘贴'});$('#importList').innerHTML=candidates.map((c,i)=>`<label class="import-row"><input type="checkbox" data-candidate="${i}"><input class="candidate-edit" data-candidate-edit="${i}" value="${esc(c.word)}" aria-label="修改识别出的英文"><small>${c.source}</small></label>`).join('');$('#importSelected').hidden=false;$('#ocrStatus').textContent='已列出英文，勾选并修改你要学的词'};
     // Recorded audio uses the media channel, so known words and dialogue can play while iPhone is silent.
     try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch{}
     const audioMap={"curious":"./audio/293028aa6ff9.m4a","tight":"./audio/98b9f3569789.m4a","yard":"./audio/3ce2e832336a.m4a","refrigerator":"./audio/a473593df4b4.m4a","bathing suit":"./audio/092d152e4446.m4a","curtain":"./audio/c8158837c0d3.m4a","ancient":"./audio/9c92ad25076f.m4a","castle":"./audio/36e473c8b75b.m4a","pickles":"./audio/08c406094e33.m4a","electricity":"./audio/3894e2077240.m4a","assignment":"./audio/f26b63d628c9.m4a","turn in":"./audio/540047a3d063.m4a","Hi! What can I get for you today?":"./audio/451e94b00ee0.m4a","I'd like a latte, please.":"./audio/5d9197ce0f68.m4a","Sure. What size would you like?":"./audio/69e9bba5cb84.m4a","A medium, please.":"./audio/37179c478b85.m4a","Would you like anything to eat?":"./audio/23b33a9e8268.m4a","No, thanks. That's all.":"./audio/619cda04595c.m4a","Great! Is that for here or to go?":"./audio/be70075e8ff2.m4a","To go, please.":"./audio/287c8b8d25e7.m4a","Hi, I'm Alex. What's your name?":"./audio/7ab62d51d665.m4a","Hi Alex, I'm ___. Nice to meet you.":"./audio/d70fb94f593b.m4a","Nice to meet you too! Where are you from?":"./audio/2503013eeaa7.m4a","I'm from China. I live in ___.":"./audio/6e2366457272.m4a","Cool! What do you like to do in your free time?":"./audio/57a5e7e3c23d.m4a","I enjoy reading and going for walks.":"./audio/242f5f84eb55.m4a","That sounds fun. What are you learning these days?":"./audio/ff196d878e67.m4a","I'm learning English because I want to travel.":"./audio/a62879e46f90.m4a","Hello! You look a little lost. Can I help you?":"./audio/13edbc1edb31.m4a","Yes, how can I get to the train station?":"./audio/1b6d0571c586.m4a","Of course. Go straight and turn left at the bank.":"./audio/0134b91dc083.m4a","Is it far from here?":"./audio/be50ee372386.m4a","It's about a ten-minute walk.":"./audio/c4bb5c77ab40.m4a","Great. Should I cross the street?":"./audio/8319380a0fe0.m4a","Yes, cross at the traffic light. You'll see it on your right.":"./audio/4012dc370a4d.m4a","Thank you so much for your help!":"./audio/198651e3dcbb.m4a"};let playingAudio=null;
@@ -431,7 +577,7 @@
       } catch { toast('导入未完成，请检查备份文件和设备空间'); }
       finally {input.value='';}
     };
-    $('#openSettings').onclick=()=>show('settingsOverlay');
+    $('#openSettings').onclick=()=>{imageJob++;$('#bgApply').disabled=false;resetBgEditor();show('settingsOverlay')};
     function renderSentences(){$('#sentenceList').innerHTML=sentences.map(s=>`<article class="sentence-item"><b>${esc(s.english)}</b><p>${esc(s.chinese)}</p><div class="sentence-actions"><button class="btn ghost" data-sentence-speak="${esc(s.id)}">听发音</button><button class="btn ghost" data-sentence-edit="${esc(s.id)}">修改</button><button class="btn ghost" data-sentence-delete="${esc(s.id)}">删除</button></div></article>`).join('')||'<p>还没有句子，先收录一句喜欢的表达吧。</p>'}
     $('#openSentences').onclick=()=>{renderSentences();show('sentencesOverlay')};
     $('#translateSentence').onclick=async()=>{const english=$('#sentenceEnglish').value.trim();if(!english){toast('先输入英文句子');return}const btn=$('#translateSentence');btn.disabled=true;try{$('#sentenceChinese').value=(await lookupWord(english)).meaning;toast('已翻译，可以修改后保存')}catch(e){toast(e.message)}finally{btn.disabled=false}};
