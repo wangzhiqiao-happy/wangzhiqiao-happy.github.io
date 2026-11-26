@@ -67,6 +67,7 @@
     .custom-bg::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(#19132550,#19132570),var(--bg-image);background-size:cover;background-position:center;transform:scale(var(--bg-scale))}
     .custom-bg .practice-actions img{visibility:hidden}
     #homeStarter[hidden],#libraryNotice[hidden]{display:none}
+    .deck-backup{display:grid;gap:10px}.deck-backup #backupCount{font-size:21px;color:var(--ink)}.backup-tools{display:flex;flex-wrap:wrap;gap:8px}.backup-tools label{position:relative;cursor:pointer}.backup-tools input{position:absolute;inset:0;width:100%;opacity:0;cursor:pointer}.deck-backup summary{cursor:pointer;padding:8px 0}.deck-backup details button{margin:6px 4px 0 0}
   </style>
 </head>
 <body>
@@ -95,7 +96,7 @@
   <div class="overlay" id="captureCheck" role="dialog" aria-modal="true" aria-labelledby="captureTitle"><section class="sheet"><div class="sheet-head"><h2 id="captureTitle">核对收录</h2><button class="close" data-close="captureCheck" aria-label="返回修改">✕</button></div><form id="checkedWords"><div id="checkRows"></div><p id="checkStatus" role="status"></p><button type="submit" class="btn">确认收录</button></form></section></div>
   <div class="overlay" id="editOverlay"><section class="sheet"><div class="sheet-head"><h2>编辑单词</h2><button class="close" data-close="editOverlay">✕</button></div><form id="editForm" class="edit-fields"><label>英文<input id="editWord" required></label><label>中文翻译<input id="editMeaning" required></label><label>音标<input id="editPhonetic"></label><label>例句<input id="editExample"></label><button class="btn" type="submit">保存修改</button></form></section></div>
   <div class="overlay" id="sentencesOverlay"><section class="sheet"><div class="sheet-head"><h2>我的句子</h2><button class="close" data-close="sentencesOverlay">✕</button></div><p>收录地道表达，练习时会和单词混合出现。</p><form id="sentenceForm" class="edit-fields"><label>英文句子<textarea id="sentenceEnglish" required placeholder="例如：That sounds like a plan."></textarea></label><label>中文意思<textarea id="sentenceChinese" required placeholder="可以自动翻译，再按你的理解修改"></textarea></label><button class="btn ghost" type="button" id="translateSentence">自动翻译</button><button class="btn" type="submit" id="saveSentence">收录句子</button></form><div class="sentence-list" id="sentenceList"></div></section></div>
-  <div class="overlay" id="settingsOverlay"><section class="sheet"><div class="sheet-head"><h2>练习与外观设置</h2><button class="close" data-close="settingsOverlay">✕</button></div><section class="settings-row"><b>词库备份</b><small id="backupStatus">词和句子保存在当前设备的这个入口。换入口前可以先导出。</small><button type="button" class="btn ghost" id="settingsStarter">补回基础 12 词</button><button class="btn ghost" id="exportDeck">导出词和句子</button><button type="button" class="btn ghost" id="restoreReduction">找回上次减少的条目</button><label>合并已有备份<input type="file" id="importDeck" accept=".json,application/json"></label></section><section class="settings-row"><b>趣味练习背景</b><div id="bgPreview" class="practice-feature"><b>趣味练习</b></div><label>背景色 <input id="bgColor" type="color" value="#614681"></label><label>上传背景图片 <input id="bgFile" type="file" accept="image/*"></label><label>图片缩放 <input id="bgZoom" type="range" min="100" max="250" value="100"></label><button id="bgClear" class="btn ghost">移除图片</button><button id="bgApply" class="btn">应用背景</button></section><div id="settingsPractice"></div><div class="settings-row"><label for="sentenceCount">每轮句子</label><select id="sentenceCount"><option value="0">暂不练句子</option><option value="2">2 句</option><option value="5">5 句</option><option value="all">全部句子</option></select></div><div class="settings-row"><label for="themeSelect">界面主题</label><select id="themeSelect"><option value="purple">薰衣草紫</option><option value="blue">晴空蓝</option><option value="peach">蜜桃粉</option><option value="mint">薄荷绿</option><option value="custom">自选颜色</option></select><input type="color" id="customColor" value="#7850aa" aria-label="选择主题颜色"></div><p class="ocr-status">设置会保存在这台设备上。</p></section></div>
+  <div class="overlay" id="settingsOverlay"><section class="sheet"><div class="sheet-head"><h2>练习与外观设置</h2><button class="close" data-close="settingsOverlay">✕</button></div><section class="settings-row deck-backup"><b>词库备份</b><strong id="backupCount"></strong><small id="backupStatus">词和句子保存在当前设备的这个入口。</small><button type="button" class="btn" id="shareDeck">保存或分享词库备份</button><small id="shareHint" role="status">可存入 iCloud 云盘，也可以在聊天里作为附件发送。</small><div class="backup-tools"><button type="button" class="btn ghost" id="exportDeck">下载备份文件</button><label class="btn ghost" for="importDeck">合并已有备份<input type="file" id="importDeck" accept=".json,application/json"></label></div><details><summary>本机恢复选项</summary><button type="button" class="btn ghost" id="restoreReduction">找回上次减少的条目</button><button type="button" class="btn ghost" id="settingsStarter">补回基础 12 词</button></details></section><section class="settings-row"><b>趣味练习背景</b><div id="bgPreview" class="practice-feature"><b>趣味练习</b></div><label>背景色 <input id="bgColor" type="color" value="#614681"></label><label>上传背景图片 <input id="bgFile" type="file" accept="image/*"></label><label>图片缩放 <input id="bgZoom" type="range" min="100" max="250" value="100"></label><button id="bgClear" class="btn ghost">移除图片</button><button id="bgApply" class="btn">应用背景</button></section><div id="settingsPractice"></div><div class="settings-row"><label for="sentenceCount">每轮句子</label><select id="sentenceCount"><option value="0">暂不练句子</option><option value="2">2 句</option><option value="5">5 句</option><option value="all">全部句子</option></select></div><div class="settings-row"><label for="themeSelect">界面主题</label><select id="themeSelect"><option value="purple">薰衣草紫</option><option value="blue">晴空蓝</option><option value="peach">蜜桃粉</option><option value="mint">薄荷绿</option><option value="custom">自选颜色</option></select><input type="color" id="customColor" value="#7850aa" aria-label="选择主题颜色"></div><p class="ocr-status">设置会保存在这台设备上。</p></section></div>
   <div class="overlay" id="progressOverlay"><section class="sheet"><div class="sheet-head"><h2>我的学习进度</h2><button class="close" data-close="progressOverlay">✕</button></div><div id="progressDetails" class="progress-details"></div><button class="btn" id="progressPractice">继续练习</button></section></div>
   <div class="overlay" id="dueOverlay"><section class="sheet due-sheet"><div class="sheet-head"><div><small class="due-kicker">TODAY'S FOCUS</small><h2>今日待打卡</h2></div><button class="close" data-close="dueOverlay">✕</button></div><p class="due-intro">这些词到了该再见一面的时间。先听一遍，再选择今天想练的。</p><label><input type="checkbox" id="dueAll"> 全选今天的词</label><div id="dueList" class="due-list"></div><button class="btn due-start" id="dueStart" type="button">练习今天的词</button></section></div>
   <div class="overlay" id="collectionOverlay"><section class="sheet"><div class="sheet-head"><h2>全部收藏 <small id="collectionCount"></small></h2><button class="close" data-close="collectionOverlay">✕</button></div><div id="collectionList" class="collection-list"></div></section></div>
@@ -546,14 +547,39 @@
     function applyTheme(){document.documentElement.classList.remove('theme-purple','theme-blue','theme-peach','theme-mint');const theme=$('#themeSelect').value;if(theme!=='custom')document.documentElement.classList.add('theme-'+theme);document.documentElement.style.setProperty('--green',theme==='custom'?$('#customColor').value:'');document.documentElement.style.setProperty('--ink',theme==='custom'?$('#customColor').value:'');$('#customColor').hidden=theme!=='custom'}
     function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify({practiceCount:$('#practiceCount').value,randomAll:$('#randomAll').checked,sentenceCount:$('#sentenceCount').value,theme:$('#themeSelect').value,customColor:$('#customColor').value}));applyTheme()}
     ['practiceCount','randomAll','sentenceCount','themeSelect','customColor'].forEach(id=>$('#'+id).addEventListener('change',saveSettings));$('#customColor').addEventListener('input',saveSettings);applyTheme();
-    $('#exportDeck').onclick = () => {
-      const data = JSON.stringify({format:'shici-library-1',words,sentences});
-      const url = URL.createObjectURL(new Blob([data], {type:'application/json'}));
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = '拾词备份-' + new Date().toISOString().slice(0,10) + '.json';
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    function backupContents(){
+      // Another window can have saved newer records since this screen was opened.
+      const read=(key,current)=>{
+        const raw=localStorage.getItem(key);
+        if(raw===null)return current;
+        if(!validRecord(key,raw))throw Error('无法读取完整词库');
+        return JSON.parse(raw);
+      };
+      return {format:'shici-library-1',exportedAt:new Date().toISOString(),words:read(KEY,words),sentences:read(sentenceKey,sentences)};
+    }
+    function backupFile(){
+      const data=backupContents(),stamp=data.exportedAt.replace(/[:.]/g,'-');
+      return new File([JSON.stringify(data)],'拾词备份-'+data.words.length+'词-'+data.sentences.length+'句-'+stamp+'.json',{type:'application/json'});
+    }
+    function downloadBackup(file){
+      const url=URL.createObjectURL(file),link=document.createElement('a');
+      link.href=url;link.download=file.name;document.body.append(link);link.click();link.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),60000);
+    }
+    $('#exportDeck').onclick=()=>{try{downloadBackup(backupFile())}catch{toast('未能生成备份，请保留当前入口后重试')}};
+    $('#shareDeck').onclick=async()=>{
+      const hint=$('#shareHint');
+      try{
+        const file=backupFile();
+        if(navigator.canShare?.({files:[file]})){
+          await navigator.share({files:[file]});
+          hint.textContent='若已存到「文件」，可在聊天中点附件选择这份备份。';
+        }else{
+          downloadBackup(file);hint.textContent='已请求下载。在聊天中点附件，选择这份 JSON 备份。';
+        }
+      }catch(err){
+        hint.textContent=err.name==='AbortError'?'已取消分享，仍可再次保存。':'暂时无法分享，请点「下载备份文件」。';
+      }
     };
     function mergeDeck(data) {
         function additions(list, existing, fields) {
@@ -637,7 +663,7 @@
       } catch { toast('导入未完成，请检查备份文件和设备空间'); }
       finally {input.value='';}
     };
-    $('#openSettings').onclick=()=>{imageJob++;$('#bgApply').disabled=false;resetBgEditor();show('settingsOverlay')};
+    $('#openSettings').onclick=()=>{imageJob++;$('#bgApply').disabled=false;resetBgEditor();try{const d=backupContents();$('#backupCount').textContent=d.words.length+' 个词 · '+d.sentences.length+' 个句子'}catch{$('#backupCount').textContent='词库读取异常'}show('settingsOverlay')};
     function renderSentences(){$('#sentenceList').innerHTML=sentences.map(s=>`<article class="sentence-item"><b>${esc(s.english)}</b><p>${esc(s.chinese)}</p><div class="sentence-actions"><button class="btn ghost" data-sentence-speak="${esc(s.id)}">听发音</button><button class="btn ghost" data-sentence-edit="${esc(s.id)}">修改</button><button class="btn ghost" data-sentence-delete="${esc(s.id)}">删除</button></div></article>`).join('')||'<p>还没有句子，先收录一句喜欢的表达吧。</p>'}
     $('#openSentences').onclick=()=>{renderSentences();show('sentencesOverlay')};
     $('#translateSentence').onclick=async()=>{const english=$('#sentenceEnglish').value.trim();if(!english){toast('先输入英文句子');return}const btn=$('#translateSentence');btn.disabled=true;try{$('#sentenceChinese').value=(await lookupWord(english)).meaning;toast('已翻译，可以修改后保存')}catch(e){toast(e.message)}finally{btn.disabled=false}};
