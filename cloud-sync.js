@@ -24,6 +24,7 @@ function mergeShiciRows(base, local, remote, field) {
 }
 
 function startShiciCloud({read, apply}) {
+  let recovering = new URLSearchParams(location.hash.slice(1)).get("type")==="recovery";
   const client = window.supabase.createClient('https://jyqvqrvmniuhbupeyati.supabase.co','sb_publishable_uicWI8gT1qfXn010wh8XOA__9zq1jqK');
   const el = id => document.getElementById(id);
   const status = message => { el('cloudStatus').textContent = message; };
@@ -31,7 +32,9 @@ function startShiciCloud({read, apply}) {
   let account = null, busy = false, pending = false, timer;
   function controls(){
     el('cloudAuth').hidden = !!account;
-    el('cloudAccount').hidden = !account;
+    el('cloudAccount').hidden = !account || recovering;
+    el('cloudRecovery').hidden = !account || !recovering;
+    el('cloudForgot').hidden = !!account;
     el('cloudAddress').textContent = account?.email || '';
     el('cloudSignout').disabled = busy;
     el('cloudMerge').disabled = busy;
@@ -81,9 +84,36 @@ function startShiciCloud({read, apply}) {
     const changed=account?.id!==session?.user?.id;
     account=session?.user||null;controls();
     if(!account){status('登录后可同步这台设备的词和句子');return}
+    if(_event==='PASSWORD_RECOVERY' || recovering){
+      recovering=true;controls();document.getElementById('settingsOverlay').classList.add('show');status('请设置新的拾词密码');return;
+    }
     if(changed && localStorage.getItem(binding)!==account.id)status('首次登录，请确认合并本机词库');
     if(changed) schedule();
   });
+  function authMessage(error){
+    if(error.code==='invalid_credentials')return '邮箱或拾词密码未通过。已有账号可点「忘记密码」。';
+    if(error.code==='email_not_confirmed')return '邮箱尚未验证，请打开最新确认邮件。';
+    if(error.status===429)return '邮件或登录请求过于频繁，请稍后再试。';
+    return error.message || '请检查网络后重试';
+  }
+  el('cloudForgot').onclick=async()=>{
+    const email=el('cloudEmail');
+    if(!email.reportValidity())return;
+    const button=el('cloudForgot');button.disabled=true;
+    try{
+      const result=await client.auth.resetPasswordForEmail(email.value.trim(),{redirectTo:location.origin+'/'});
+      if(result.error)throw result.error;
+      status('重置请求已提交，请打开最新的重置密码邮件，在拾词页面设置新密码。');
+    }catch(error){status(authMessage(error))}finally{button.disabled=false}
+  };
+  el('cloudRecovery').onsubmit=async event=>{
+    event.preventDefault();const button=event.target.querySelector('button');button.disabled=true;
+    try{
+      const result=await client.auth.updateUser({password:el('cloudNewPass').value});
+      if(result.error)throw result.error;
+      el('cloudNewPass').value='';recovering=false;controls();status('密码已更新。请回到有词库的手机图标，用新密码登录。');
+    }catch(error){status(authMessage(error))}finally{button.disabled=false}
+  };
   el('cloudAuth').onsubmit=async event=>{
     event.preventDefault();
     const email=el('cloudEmail').value.trim(),password=el('cloudPass').value;
@@ -94,7 +124,7 @@ function startShiciCloud({read, apply}) {
       if(result.error)throw result.error;
       el('cloudPass').value='';
       if(!result.data.session)status('请到邮箱确认注册，再回到拾词登录。');
-    }catch(error){status('登录或注册未完成：'+(error.message||'请稍后重试'))}
+    }catch(error){status(authMessage(error))}
     finally{buttons.forEach(b=>b.disabled=false)}
   };
   el('cloudMerge').onclick=()=>{
