@@ -74,7 +74,7 @@
     .cloud-password{position:relative;display:block}.cloud-password input{width:100%;padding-right:52px}.cloud-eye{position:absolute;inset:0 4px 0 auto;display:grid;place-items:center;width:44px;border:0;background:transparent;color:var(--ink);cursor:pointer}.cloud-eye svg{width:22px;height:22px}.cloud-eye[aria-pressed="false"] .eye-slash{display:none}
   </style>
 <link rel="stylesheet" href="./visual36.css">
-<link rel="stylesheet" href="./melfy-home.css">
+<link rel="stylesheet" href="./melfy-home.css?v=41">
 </head>
 <body>
   <main class="shell">
@@ -83,17 +83,17 @@
       <header class="melfy-hero">
         <h1 class="sr-home">Melfy 拾词</h1>
         <div class="melfy-toolbar">
-          <button type="button" id="homeMenu" popovertarget="homeMenuPanel" aria-label="打开首页菜单">☰</button>
-          <button type="button" id="openSettings" aria-label="打开设置">⚙</button>
+          <button type="button" id="homeMenu" popovertarget="homeMenuPanel" aria-label="打开首页菜单"><i aria-hidden="true"></i></button>
+          <button type="button" id="editPoster" aria-label="自定义首页海报" title="自定义首页海报"></button>
         </div>
-        <div id="homeMenuPanel" popover><button type="button" data-entry="openLibrary">我的词库</button><button type="button" data-entry="openSentences">我的句子</button><button type="button" data-entry="openTalk">情景对话</button></div>
-        <button id="openAdd" aria-label="开启拾词，添加新词"><span>Add<br>New Word</span><span aria-hidden="true">＋</span></button>
+        <div id="homeMenuPanel" popover><button id="openSettings" type="button">设置与备份</button><button type="button" data-entry="openLibrary">我的词库</button><button type="button" data-entry="openSentences">我的句子</button><button type="button" data-entry="openTalk">情景对话</button></div>
+        <button id="openAdd" aria-label="开启拾词，添加新词"><span>Add<br>New Word</span><span aria-hidden="true">+</span></button>
       </header>
       <section id="libraryNotice" class="capture-block" hidden><b>检查本机词库</b><span id="libraryNoticeText"></span><button type="button" class="btn" id="homeStarter">补回基础 12 词</button><button type="button" class="btn ghost" id="inspectLibrary">查看词库备份</button></section>
 
-      <div class="feature-grid"><button class="feature-card" id="openSentences" type="button"><img class="entry-art" src="./sentence-reader.jpg" alt=""><b>我的句子</b><small>收录地道表达</small></button><button class="feature-card" id="openTalk" type="button"><img class="entry-art" src="./dialogue-listener.jpg" alt=""><b>情景对话</b><small>开口说英语</small></button><button class="feature-card" id="openLibrary" type="button"><img class="entry-art" src="./library-tablet-star.jpg" alt=""><b>我的词库</b><small>整理和选择要练的词</small></button></div>
+      <div class="feature-grid"><button class="feature-card" id="openFlash" type="button"><img class="entry-art" src="./sentence-reader.jpg" alt=""><b>翻卡记词</b><small>翻卡复习</small></button><button class="feature-card" id="openTalk" type="button"><img class="entry-art" src="./dialogue-listener.jpg" alt=""><b>情景对话</b><small>开口说英语</small></button><button class="feature-card" id="openLibrary" type="button"><img class="entry-art" src="./library-tablet-star.jpg" alt=""><b>我的词库</b><small>整理和选择要练的词</small></button></div>
       <div class="practice-options"><label>每轮练习 <select id="practiceCount"><option value="5">5 个词</option><option value="10">10 个词</option><option value="20">20 个词</option><option value="all">全部单词</option></select></label><label><input type="checkbox" id="randomAll" checked> 从整个词库随机抽取</label></div>
-      <div class="stats"><button class="stat collection-button" id="openDue" type="button"><span class="label">今日待打卡</span><strong class="num" id="dueCount">0</strong><span class="stat-detail"><span><b id="dueToday">0</b><small>今天到期</small></span><span><b id="dueEarlier">0</b><small>此前待练</small></span></span></button><button class="stat collection-button" id="openCollection" type="button"><span class="label">全部收藏</span><strong class="num" id="totalCount">0</strong><span class="stat-detail"><span><b id="addedToday">0</b><small>今日新增</small></span><span><b id="addedMonth">0</b><small>本月新增</small></span></span></button><button class="stat" id="openFlash"><strong class="num" id="newWordCount">0</strong><span class="label">新词 · 翻卡记词</span><span class="stat-detail"><span><b id="learningWordCount">0</b><small>学习中</small></span><span><b id="knownWordCount">0</b><small>已熟练</small></span></span></button><article class="practice-feature"><h2 lang="en">Start<br>Learning</h2><p id="heroText">把收集的词用翻译、听音、配对和跟读练熟。</p><div class="practice-actions"><button class="practice-start" id="startReview" type="button">开始练习 <span>→</span></button></div></article></div>
+      <div class="stats"><button class="stat collection-button" id="openDue" type="button"><span class="label">今日待打卡</span><strong class="num" id="dueCount">0</strong><span class="stat-detail"><span><b id="dueToday" title="今天到期且待打卡">0</b><small>今日</small></span><span><b id="dueMonth" title="本月截至今天到期且待打卡">0</b><small>本月</small></span></span></button><button class="stat collection-button" id="openCollection" type="button"><span class="label">全部收藏</span><strong class="num" id="totalCount">0</strong><span class="stat-detail"><span><b id="addedToday">0</b><small>今日</small></span><span><b id="addedMonth">0</b><small>本月</small></span></span></button><button class="stat" id="openSentences"><strong class="num" id="sentenceHomeCount">0</strong><span class="label">地道句子</span><span class="stat-detail"><span><b id="sentenceAddedToday">0</b><small>今日</small></span><span><b id="sentenceAddedMonth">0</b><small>本月</small></span></span></button><article class="practice-feature"><h2 lang="en">Start<br>Learning</h2><p id="heroText">把收集的词用翻译、听音、配对和跟读练熟。</p><div class="practice-actions"><button class="practice-start" id="startReview" type="button">开始练习 <span>→</span></button></div></article></div>
     </section>
     <section class="section" id="librarySection"><div class="section-head"><div><h2>我的词库</h2><small>勾选右上角，选择本次练习的词</small></div><button class="btn ghost" id="calendarBtn">设每日提醒</button></div><div class="library-filters"><input id="librarySearch" placeholder="搜索英文或中文"><select id="libraryFilter"><option value="all">全部单词</option><option value="due">今日待打卡</option><option value="new">新收录</option><option value="learning">学习中</option><option value="mastered">已熟练</option></select></div><div id="levelTabs" class="level-tabs" aria-label="词库筛选"></div><div class="review-select"><input type="checkbox" id="selectAllDue" checked><label for="selectAllDue" id="selectedSummary">本次练习的词已全选</label><button class="btn ghost" id="startSelected">练习选中词</button></div><div class="grid" id="wordGrid"></div></section>
   </main>
@@ -279,14 +279,13 @@
     function dueWords(){return words.filter(w=>dayStart(w.due||0)<=dayStart(Date.now())).sort((a,b)=>a.due-b.due)}
     function streak(){return meta.streak||0}
     function render(){const due=dueWords();$('#dueCount').textContent=due.length;$('#totalCount').textContent=words.length;
-      const learning=words.filter(w=>w.level>0 && w.level<3).length;
-      const known=words.filter(w=>w.level>=3).length;
-      $('#newWordCount').textContent=words.length-learning-known;
-      $('#learningWordCount').textContent=learning;
-      $('#knownWordCount').textContent=known;
       const now=Date.now(),today=dayStart(now),month=new Date(today);month.setDate(1);
+      $('#sentenceHomeCount').textContent=sentences.length;
+      const newSentencesSince=start=>sentences.filter(row=>row.created>=start && row.created<=now).length;
+      $('#sentenceAddedToday').textContent='+'+newSentencesSince(today);
+      $('#sentenceAddedMonth').textContent='+'+newSentencesSince(+month);
       const earlier=due.filter(w=>dayStart(w.due||0)<today).length;
-      $('#dueToday').textContent=due.length-earlier;$('#dueEarlier').textContent=earlier;
+      $('#dueToday').textContent='+'+(due.length-earlier);$('#dueMonth').textContent='+'+due.filter(w=>dayStart(w.due||0)>=+month).length;
       const additionsSince=start=>words.filter(w=>w.created>=start && w.created<=now).length;
       $('#addedToday').textContent='+'+additionsSince(today);$('#addedMonth').textContent='+'+additionsSince(+month);
       $('#heroText').textContent=words.length||sentences.length?`已收录 ${words.length} 个词、${sentences.length} 个句子。`:'先开启拾词，收进第一个想学的词。';$('#startReview').textContent=due.length?`开始今日测试 · ${due.length}`:'随机测试几个';}
@@ -691,11 +690,11 @@
       } catch { toast('导入未完成，请检查备份文件和设备空间'); }
       finally {input.value='';}
     };
-    $('#openSettings').onclick=()=>{imageJob++;$('#bgApply').disabled=false;resetBgEditor();try{const d=backupContents();$('#backupCount').textContent=d.words.length+' 个词 · '+d.sentences.length+' 个句子'}catch{$('#backupCount').textContent='词库读取异常'}show('settingsOverlay')};
+    $('#openSettings').onclick=()=>{$('#homeMenuPanel').hidePopover?.();imageJob++;$('#bgApply').disabled=false;resetBgEditor();try{const d=backupContents();$('#backupCount').textContent=d.words.length+' 个词 · '+d.sentences.length+' 个句子'}catch{$('#backupCount').textContent='词库读取异常'}show('settingsOverlay')};
     function renderSentences(){$('#sentenceList').innerHTML=sentences.map(s=>`<article class="sentence-item"><b>${esc(s.english)}</b><p>${esc(s.chinese)}</p><div class="sentence-actions"><button class="btn ghost" data-sentence-speak="${esc(s.id)}">听发音</button><button class="btn ghost" data-sentence-edit="${esc(s.id)}">修改</button><button class="btn ghost" data-sentence-delete="${esc(s.id)}">删除</button></div></article>`).join('')||'<p>还没有句子，先收录一句喜欢的表达吧。</p>'}
     $('#openSentences').onclick=()=>{renderSentences();show('sentencesOverlay')};
     $('#translateSentence').onclick=async()=>{const english=$('#sentenceEnglish').value.trim();if(!english){toast('先输入英文句子');return}const btn=$('#translateSentence');btn.disabled=true;try{$('#sentenceChinese').value=(await lookupWord(english)).meaning;toast('已翻译，可以修改后保存')}catch(e){toast(e.message)}finally{btn.disabled=false}};
-    $('#sentenceForm').onsubmit=e=>{e.preventDefault();const english=$('#sentenceEnglish').value.trim(),chinese=$('#sentenceChinese').value.trim();if(!english||!chinese)return;if(editingSentenceId){Object.assign(sentences.find(s=>s.id===editingSentenceId),{english,chinese})}else sentences.unshift({id:crypto.randomUUID?.()||String(Date.now()),english,chinese});saveRecord(SENTENCE_KEY,JSON.stringify(sentences));editingSentenceId=null;e.target.reset();$('#saveSentence').textContent='收录句子';renderSentences();render();toast('句子已保存')};
+    $('#sentenceForm').onsubmit=e=>{e.preventDefault();const english=$('#sentenceEnglish').value.trim(),chinese=$('#sentenceChinese').value.trim();if(!english||!chinese)return;if(editingSentenceId){Object.assign(sentences.find(s=>s.id===editingSentenceId),{english,chinese})}else sentences.unshift({id:crypto.randomUUID?.()||String(Date.now()),english,chinese,created:Date.now()});saveRecord(SENTENCE_KEY,JSON.stringify(sentences));editingSentenceId=null;e.target.reset();$('#saveSentence').textContent='收录句子';renderSentences();render();toast('句子已保存')};
     $('#sentenceList').onclick=e=>{const b=e.target.closest('button');if(!b)return;const id=b.dataset.sentenceSpeak||b.dataset.sentenceEdit||b.dataset.sentenceDelete,s=sentences.find(x=>x.id===id);if(!s)return;if(b.dataset.sentenceSpeak){speak(s.english);return}if(b.dataset.sentenceEdit){editingSentenceId=id;$('#sentenceEnglish').value=s.english;$('#sentenceChinese').value=s.chinese;$('#saveSentence').textContent='保存修改';$('#sentenceEnglish').focus();return}if(!confirm('删除这句话？'))return;sentences=sentences.filter(x=>x.id!==id);saveRecord(SENTENCE_KEY,JSON.stringify(sentences));render();renderSentences()};
     const baseRenderReviewTask=renderReviewTask;
     renderReviewTask=function(){const task=reviewTasks[taskPos];if(task?.type!=='sentence'){$('#quizWord').style.fontSize='';baseRenderReviewTask();return}$('#reviewIndex').textContent=`${taskPos+1} / ${reviewTasks.length}`;$('#progressBar').style.width=`${taskPos/reviewTasks.length*100}%`;$('#testStage').textContent='句子翻译 · 选出正确意思';$('#quizSpeak').style.display='';$('#quizWord').textContent=task.sentence.english;$('#quizWord').style.fontSize='clamp(24px,5vw,40px)';$('#quizPhonetic').textContent='';$('#pronunciationPane').classList.remove('show');$('#matchPane').classList.remove('show');$('#meaningChoices').style.display='grid';$('#testFeedback').textContent='';$('#testNext').classList.remove('show');const answer=task.sentence.chinese,alternatives=[...sentences.map(s=>s.chinese),...words.map(w=>w.meaning),...meaningBank].filter((x,i,a)=>x&&x!==answer&&a.indexOf(x)===i);$('#meaningChoices').innerHTML=shuffle([answer,...shuffle(alternatives).slice(0,3)]).map(x=>`<button class="choice" data-sentence-choice="${esc(x)}">${esc(x)}</button>`).join('');$$('[data-sentence-choice]').forEach(b=>b.onclick=()=>{const correct=b.dataset.sentenceChoice===answer;$$('[data-sentence-choice]').forEach(x=>{x.disabled=true;if(x.dataset.sentenceChoice===answer)x.classList.add('correct')});if(!correct)b.classList.add('wrong');$('#testFeedback').textContent=correct?'✓ 答对了！':'正确答案：'+answer;$('#testNext').classList.add('show')})};
@@ -793,5 +792,10 @@
     }else $('#cloudStatus').textContent='云同步组件未能加载，请联网后重新打开。';
     })().catch(()=>alert('词库未能正常读取，请保留这个入口和网站数据。'));
   </script>
-</body>
+<dialog id="posterEditor" aria-labelledby="posterTitle"><form method="dialog"><h2 id="posterTitle">首页海报</h2><button aria-label="关闭">×</button></form>
+<div id="posterPreview" aria-label="拖动调整取景"></div><p>拖动图片调整位置，滑动下方滑块缩放。</p>
+<label class="poster-upload">从相册选择图片<input type="file" id="posterFile" accept="image/*"></label>
+<label>缩放 <input type="range" id="posterZoom" min="1" max="3" step=".01"></label>
+<p id="posterStatus" role="status"></p><footer><button id="posterReset">恢复默认</button><button id="posterSave">保存海报</button></footer></dialog>
+<script src="./poster-editor.js"></script></body>
 </html>
