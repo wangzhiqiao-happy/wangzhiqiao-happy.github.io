@@ -112,7 +112,7 @@
   <div class="overlay" id="talkOverlay"><section class="sheet"><div class="sheet-head"><div><h2>🎙 情景对话</h2><small>大胆说，先流利再完美</small></div><button class="close" data-close="talkOverlay">✕</button></div><div class="scene-picker" id="scenePicker"><p>选一个今天想练的真实场景：</p><div class="scene-grid" id="sceneGrid"></div></div><div class="talk-wrap" id="talkWrap"><div class="sheet-head"><button class="btn ghost" id="backScenes">← 换场景</button><b id="sceneTitle"></b><span id="turnCount"></span></div><div class="chat" id="chatLog"></div><div class="coach" id="coachTip">先听对方说，然后按住麦克风回答。</div><div class="hint-row"><span>不知道怎么说？</span><button class="hint-chip" id="showHint">给我一句提示</button><span id="hintText"></span></div><div class="talk-input"><button class="mic" id="micBtn" aria-label="开始语音输入">🎙</button><textarea id="talkAnswer" placeholder="点击麦克风说英语，也可以直接打字"></textarea><button class="btn send" id="sendTalk">发送</button></div></div></section></div>
   <div class="toast" id="toast"></div>
   <script src="./supabase-client.js"></script>
-  <script src="./cloud-sync.js?v=38"></script>
+  <script src="./cloud-sync.js?v=39"></script>
   <script>
     (async function startApp(){
     const KEY='shici.words.v1', META='shici.meta.v1';

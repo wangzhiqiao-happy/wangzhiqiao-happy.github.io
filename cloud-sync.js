@@ -131,7 +131,7 @@ function startShiciCloud({read, apply}) {
     button.textContent='正在请求重置邮件…';
     feedback.textContent='';
     try{
-      const result=await client.auth.resetPasswordForEmail(email.value,{redirectTo:location.origin+'/'});
+      const result=await client.auth.resetPasswordForEmail(email.value,{redirectTo: new URL('./reset-password.html',location.href).href});
       if(result.error)throw result.error;
       feedback.textContent='重置请求已提交。打开最新的重置邮件，设置并保存新密码。';
     }catch(error){
