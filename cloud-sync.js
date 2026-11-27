@@ -98,13 +98,26 @@ function startShiciCloud({read, apply}) {
   }
   el('cloudForgot').onclick=async()=>{
     const email=el('cloudEmail');
-    if(!email.reportValidity())return;
-    const button=el('cloudForgot');button.disabled=true;
+    const feedback=el('cloudResetStatus'),button=el('cloudForgot');
+    email.value=email.value.trim();
+    if(!email.checkValidity()){
+      feedback.textContent='请先在上方填写注册拾词时用的邮箱。';
+      email.focus();
+      return;
+    }
+    button.disabled=true;
+    button.textContent='正在请求重置邮件…';
+    feedback.textContent='';
     try{
-      const result=await client.auth.resetPasswordForEmail(email.value.trim(),{redirectTo:location.origin+'/'});
+      const result=await client.auth.resetPasswordForEmail(email.value,{redirectTo:location.origin+'/'});
       if(result.error)throw result.error;
-      status('重置请求已提交，请打开最新的重置密码邮件，在拾词页面设置新密码。');
-    }catch(error){status(authMessage(error))}finally{button.disabled=false}
+      feedback.textContent='重置请求已提交。打开最新的重置邮件，设置并保存新密码。';
+    }catch(error){
+      feedback.textContent=error.name==='AuthRetryableFetchError'?'暂时连不上登录服务，请检查网络后再试。':authMessage(error);
+    }finally{
+      button.disabled=false;
+      button.textContent='忘记密码';
+    }
   };
   el('cloudRecovery').onsubmit=async event=>{
     event.preventDefault();const button=event.target.querySelector('button');button.disabled=true;
