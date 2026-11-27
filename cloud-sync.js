@@ -24,10 +24,27 @@ function mergeShiciRows(base, local, remote, field) {
 }
 
 function startShiciCloud({read, apply}) {
-  let recovering = new URLSearchParams(location.hash.slice(1)).get("type")==="recovery";
+  const callback = new URLSearchParams(location.hash.slice(1));
+  let recovering = callback.get('type') === 'recovery';
+  const callbackFailed = callback.has('error') || callback.has('error_code');
+  let showCallbackError = callbackFailed;
+  function openCloudSettings() {
+    document.getElementById('openSettings').click();
+    document.getElementById('cloudStatus').scrollIntoView({block:'nearest'});
+  }
   const client = window.supabase.createClient('https://jyqvqrvmniuhbupeyati.supabase.co','sb_publishable_uicWI8gT1qfXn010wh8XOA__9zq1jqK');
   const el = id => document.getElementById(id);
   const status = message => { el('cloudStatus').textContent = message; };
+  for(const toggle of document.querySelectorAll('[data-password]')){
+    const input=el(toggle.dataset.password);
+    const setVisible=visible=>{
+      input.type=visible?'text':'password';
+      toggle.setAttribute('aria-pressed',String(visible));
+      toggle.setAttribute('aria-label',visible?'隐藏密码':'显示密码');
+    };
+    toggle.onclick=()=>setVisible(input.type==='password');
+    input.form.addEventListener('submit',()=>setVisible(false));
+  }
   const binding = 'shici.cloud.owner';
   let account = null, busy = false, pending = false, timer;
   function controls(){
@@ -83,9 +100,14 @@ function startShiciCloud({read, apply}) {
   client.auth.onAuthStateChange((_event,session)=>{
     const changed=account?.id!==session?.user?.id;
     account=session?.user||null;controls();
+    if(showCallbackError || (recovering && !account && _event==='INITIAL_SESSION')){
+      showCallbackError=false;recovering=false;controls();openCloudSettings();
+      status('邮件链接已失效或未能打开，请用「忘记密码」发送新邮件。');
+      return;
+    }
     if(!account){status('登录后可同步这台设备的词和句子');return}
     if(_event==='PASSWORD_RECOVERY' || recovering){
-      recovering=true;controls();document.getElementById('settingsOverlay').classList.add('show');status('请设置新的拾词密码');return;
+      recovering=true;controls();status('请设置新的拾词密码');openCloudSettings();return;
     }
     if(changed && localStorage.getItem(binding)!==account.id)status('首次登录，请确认合并本机词库');
     if(changed) schedule();
@@ -121,6 +143,7 @@ function startShiciCloud({read, apply}) {
   };
   el('cloudRecovery').onsubmit=async event=>{
     event.preventDefault();const button=event.target.querySelector('button');button.disabled=true;
+    status('正在保存新密码…');
     try{
       const result=await client.auth.updateUser({password:el('cloudNewPass').value});
       if(result.error)throw result.error;
